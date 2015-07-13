@@ -274,9 +274,9 @@
 			return projection([latitude, longitude])[1];
 		})
 		.attr("r", function(d) {
-		if (d.class === "X") {return 10.0*d.level  ;}            
-		if (d.class === "C") {return 1.0*d.level   ;}
-		if (d.class === "M") {return 5.0*d.level   ;}
+		if (d.class === "X") {return Math.pow((100.0*d.level),0.7);}           
+		if (d.class === "C") {return Math.pow((1.0*d.level),0.7)  ;}
+		if (d.class === "M") {return Math.pow((10.0*d.level),0.7) ;}
 		})	   
 		.attr("fill", function(d) {  
 		if (d.class === "X") {return "rgba("+ d3.round(((d.level*7)+180)) + ", 69, 0, 0.75)"  ;}            
