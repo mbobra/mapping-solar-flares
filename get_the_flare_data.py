@@ -17,6 +17,7 @@ Examples:  ipython:
            
 Written:   Monica Bobra
            04 August 2015
+           29 January 2016 -- modified to check for 'MISSING' keyword value
 """
 
 import urllib, json, pandas as pd, numpy as np, argparse
@@ -98,6 +99,10 @@ for i in range(n_elements):
 
     # if there's no data at this time, quit
     if data['count'] == 0:
+        continue
+
+    # if there's missing keyword information, quit
+    if ('MISSING' in str(data['keywords'])):
         continue
 
     # transform into carrington coordinates
