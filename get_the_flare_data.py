@@ -60,7 +60,7 @@ for i in range(n_elements):
 t_rec = []
 nice_time = []   
 for i in range(n_elements):
-    t_rec.append(listofresults[i]['peak_time'].strftime('%Y.%m.%d_%H:%m_TAI'))
+    t_rec.append(listofresults[i]['peak_time'].strftime('%Y.%m.%d_%H:%M_TAI'))
     nice_time.append(listofresults[i]['peak_time'].strftime('%d %B %Y at %H:%M'))
 
 # noaa active region number
