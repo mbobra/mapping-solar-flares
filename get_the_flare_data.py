@@ -8,19 +8,17 @@ Inputs:    -- t_start: start time, e.g.: '2014/10/30 04:25'
 
 Usage:     This code depends on the numpy, scipy, pandas, urllib, and sunpy libraries.
 
-Examples:  ipython:
-           > %run get_the_flare_data.py --t_start='2014/10/01 00:00' --t_end='2015/01/06 00:00' --flare_class='X1' --ofile='xflares.csv'
-
-           command line:
+Examples:  command line:
            > python get_the_flare_data.py --help
            > python get_the_flare_data.py --t_start='2014/10/01 00:00' --t_end='2015/01/06 00:00' --flare_class='X1' --ofile='xflares.csv'
            
 Written:   Monica Bobra
            04 August 2015
            29 January 2016 -- modified to check for 'MISSING' keyword value
+           08 August 2017 -- python 3.5 compatible
 """
 
-import urllib, json, pandas as pd, numpy as np, argparse
+import urllib, json, pandas as pd, numpy as np, argparse, requests
 from sunpy.time import TimeRange
 import sunpy.instr.goes
 
@@ -78,7 +76,7 @@ f = open(ofile,"a")
 f.write("class,level,time,latitude,longitude\n")
 
 for i in range(len(listofresults)):
-	print listofresults[i]['goes_class'],listofresults[i]['peak_time'],listofresults[i]['noaa_active_region']
+    print(listofresults[i]['goes_class'],listofresults[i]['peak_time'],listofresults[i]['noaa_active_region'])
 
 for i in range(n_elements):
     # if there's no NOAA active region, quit
@@ -94,8 +92,8 @@ for i in range(n_elements):
 
     #construct jsoc_info queries and query jsoc database
     url = "http://jsoc.stanford.edu/cgi-bin/ajax/jsoc_info?ds=hmi.sharp_720s["+str(idx.HARPNUM.values[0])+"]["+str(t_rec[i])+"]&op=rs_list&key=LAT_FWT,LON_FWT,CRLN_OBS"
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())
+    response = requests.get(url)
+    data = response.json()
 
     # if there's no data at this time, quit
     if data['count'] == 0:
@@ -118,7 +116,7 @@ for i in range(n_elements):
     latitude = str(lat_fwt)
     longitude = str(np.mod(lon_fwt + float(data['keywords'][2]['values'][0]),360))
     
-    print classification[i]+","+level[i]+","+nice_time[i]+","+longitude+","+latitude
+    print(classification[i]+","+level[i]+","+nice_time[i]+","+longitude+","+latitude)
     f.write(classification[i]+","+level[i]+","+nice_time[i]+","+longitude+","+latitude+"\n")
 
 f.close()
