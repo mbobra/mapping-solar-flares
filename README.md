@@ -9,3 +9,4 @@ You can use these codes to plot all the solar flares observed by the Solar Dynam
 
 To create the data visualization framework in d3, use `flares.html`.
 To create the .csv files read by flares.html, use `get_the_flare_data.py`, in this same directory.
+To create a static image, use `flares.ipynb`.
