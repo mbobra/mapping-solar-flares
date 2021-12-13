@@ -6,22 +6,19 @@ Inputs:    -- t_start: start time, e.g.: '2014/10/30 04:25'
            -- flare_class: minimum goes x-ray flux flare classification, e.g.: 'X1'
            -- ofile: output file to append to, e.g.: 'xflares.csv'
 
-Usage:     This code depends on the numpy, scipy, pandas, urllib, and sunpy libraries.
+Usage:     This code depends on the numpy, scipy, pandas, urllib, and sunpy (including sunkit-instruments) libraries.
 
 Examples:  command line:
            > python get_the_flare_data.py --help
            > python get_the_flare_data.py --t_start='2014/05/01 00:00' --t_end='2019/06/01 00:00' --min_flare_class='X2.7' --max_flare_class='X9.1' --ofile='xflares.csv'
            
-Written:   Monica Bobra
-           04 August 2015
-           29 January 2016 -- modified to check for 'MISSING' keyword value
-           08 August 2017 -- python 3.5 compatible
-           04 June 2019 -- added minimum and maximum flare class
+Author:   Monica Bobra
+
 """
 
 import urllib, json, pandas as pd, numpy as np, argparse, requests
 from sunpy.time import TimeRange
-import sunpy.instr.goes
+from sunkit_instruments.goes_xrs import get_goes_event_list
 
 t_start    = ''
 t_end      = ''
@@ -44,7 +41,7 @@ ofile           = args.ofile
 # query goes database
 # n.b.: use a time range such that you can just append to the previous list
 time_range = TimeRange(t_start,t_end)
-listofresults = sunpy.instr.goes.get_goes_event_list(time_range, min_flare_class)
+listofresults = get_goes_event_list(time_range, min_flare_class)
 n_elements = len(listofresults)
 
 # recast and parse flare class and level input parameters
